@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 namespace Day02
 {
@@ -6,7 +8,10 @@ namespace Day02
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var validCount = File.ReadLines(args[0])
+                .Select(PasswordRecord.Parse)
+                .Count(x => x.IsValid);
+            Console.WriteLine($"# of valid records: {validCount}");
         }
     }
 }
