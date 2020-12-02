@@ -8,7 +8,7 @@ namespace Day02
     {
         // Rider 2020.3 EAP9 erroneously suggests that this property be made static
         [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
-        public bool IsValid => Password[FirstIndex] == CheckChar != (Password[SecondIndex] == CheckChar);
+        public bool IsValid => Password[FirstIndex] == CheckChar ^ Password[SecondIndex] == CheckChar;
 
         public static PasswordRecord Parse(string str)
         {
