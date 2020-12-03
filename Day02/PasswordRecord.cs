@@ -21,7 +21,8 @@ namespace Day02
             var firstIndex = int.Parse(match.Groups[1].Value) - 1;
             var secondIndex = int.Parse(match.Groups[2].Value) - 1;
             var checkChar = match.Groups[3].Value[0];
-            return new PasswordRecord(firstIndex, secondIndex, checkChar, match.Groups[4].Value);
+            var password = match.Groups[4].Value;
+            return new PasswordRecord(firstIndex, secondIndex, checkChar, password);
         }
     }
 }
