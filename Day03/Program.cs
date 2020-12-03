@@ -10,10 +10,12 @@ namespace Day03
         private static void Main(string[] args)
         {
             var map = ReadMap(args[0]);
-            var treeCount = map
-                .Descend(3, 1)
-                .Count(x => x == '#');
-            Console.WriteLine(treeCount);
+            var a = map.CountTrees(1, 1);
+            var b = map.CountTrees(3, 1);
+            var c = map.CountTrees(5, 1);
+            var d = map.CountTrees(7, 1);
+            var e = map.CountTrees(1, 2);
+            Console.WriteLine((long) a * b * c * d * e);
         }
 
         private static char[,] ReadMap(string path)
@@ -31,13 +33,18 @@ namespace Day03
             return map;
         }
 
-        private static IEnumerable<char> Descend(this char[,] map, int run, int rise)
+        private static int CountTrees(this char[,] map, int right, int down)
+        {
+            return map.Descend(right, down).Count(x => x == '#');
+        }
+
+        private static IEnumerable<char> Descend(this char[,] map, int right, int down)
         {
             var x = 0;
-            for (var y = 0; y < map.GetLength(1); y += rise)
+            for (var y = 0; y < map.GetLength(1); y += down)
             {
                 yield return map[x, y];
-                x = (x + run) % map.GetLength(0);
+                x = (x + right) % map.GetLength(0);
             }
         }
     }
