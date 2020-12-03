@@ -6,7 +6,7 @@ namespace Day02
 {
     public record PasswordRecord(int FirstIndex, int SecondIndex, char CheckChar, string Password)
     {
-        // Rider 2020.3 EAP9 erroneously suggests that this property be made static
+        // Rider 2020.3 EAP10 erroneously suggests that this property be made static
         [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
         public bool IsValid => Password[FirstIndex] == CheckChar ^ Password[SecondIndex] == CheckChar;
 
