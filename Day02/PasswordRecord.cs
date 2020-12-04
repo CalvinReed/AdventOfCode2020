@@ -12,7 +12,7 @@ namespace Day02
 
         public static PasswordRecord Parse(string str)
         {
-            var match = Regex.Match(str, @"(\d+)-(\d+) ([a-z]): ([a-z]+)");
+            var match = Regex.Match(str, @"^(\d+)-(\d+) ([a-z]): ([a-z]+)$");
             if (!match.Success)
             {
                 throw new ArgumentException(null, nameof(str));
