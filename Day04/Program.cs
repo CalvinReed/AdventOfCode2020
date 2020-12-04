@@ -23,7 +23,7 @@ namespace Day04
                    && passport.TryGetValue("hcl", out var hcl)
                    && Regex.IsMatch(hcl, @"^#[0-9a-f]{6}$")
                    && passport.TryGetValue("ecl", out var ecl)
-                   && Regex.IsMatch(ecl, @"^amb|blu|brn|gry|grn|hzl|oth$")
+                   && Regex.IsMatch(ecl, @"^(amb|blu|brn|gry|grn|hzl|oth)$")
                    && passport.TryGetValue("pid", out var pid)
                    && Regex.IsMatch(pid, @"^\d{9}$");
         }
