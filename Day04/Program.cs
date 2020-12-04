@@ -81,11 +81,10 @@ namespace Day04
 
         private static Dictionary<string, string> ToPassport(IEnumerable<string> data)
         {
-            var passport = string.Join(' ', data)
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            return data
+                .SelectMany(x => x.Split(' ', StringSplitOptions.RemoveEmptyEntries))
                 .Select(x => x.Split(':'))
                 .ToDictionary(x => x[0], x => x[1]);
-            return passport;
         }
     }
 }
