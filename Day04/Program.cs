@@ -16,30 +16,24 @@ namespace Day04
 
         private static bool IsValid(IReadOnlyDictionary<string, string> passport)
         {
-            var isValid =
-                passport.RangeCheck("byr", 1920, 2002) &&
-                passport.RangeCheck("iyr", 2010, 2020) &&
-                passport.RangeCheck("eyr", 2020, 2030) &&
-                passport.HeightCheck() &&
-                passport.MatchCheck("hcl", @"^#[0-9a-f]{6}$") &&
-                passport.MatchCheck("ecl", @"^(?:amb|blu|brn|gry|grn|hzl|oth)$") &&
-                passport.MatchCheck("pid", @"^\d{9}$");
-            return isValid;
+            return passport.RangeCheck("byr", 1920, 2002)
+                   && passport.RangeCheck("iyr", 2010, 2020)
+                   && passport.RangeCheck("eyr", 2020, 2030)
+                   && passport.HeightCheck()
+                   && passport.TryGetValue("hcl", out var hcl)
+                   && Regex.IsMatch(hcl, @"^#[0-9a-f]{6}$")
+                   && passport.TryGetValue("ecl", out var ecl)
+                   && Regex.IsMatch(ecl, @"^amb|blu|brn|gry|grn|hzl|oth$")
+                   && passport.TryGetValue("pid", out var pid)
+                   && Regex.IsMatch(pid, @"^\d{9}$");
         }
 
         private static bool RangeCheck(this IReadOnlyDictionary<string, string> passport, string key, int min, int max)
         {
-            var isValid =
-                passport.TryGetValue(key, out var value)
-                && int.TryParse(value, out var n)
-                && n >= min
-                && n <= max;
-            return isValid;
-        }
-
-        private static bool MatchCheck(this IReadOnlyDictionary<string, string> passport, string key, string pattern)
-        {
-            return passport.TryGetValue(key, out var value) && Regex.IsMatch(value, pattern);
+            return passport.TryGetValue(key, out var value)
+                   && int.TryParse(value, out var n)
+                   && n >= min
+                   && n <= max;
         }
 
         private static bool HeightCheck(this IReadOnlyDictionary<string, string> passport)
