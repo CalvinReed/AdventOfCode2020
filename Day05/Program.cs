@@ -10,8 +10,8 @@ namespace Day05
         {
             var passes = File.ReadLines(args[0])
                 .Select(BoardingPass.Parse)
+                .OrderBy(x => x.Id)
                 .ToList();
-            passes.Sort((x, y) => x.Id.CompareTo(y.Id));
             for (var i = 1; i < passes.Count; i++)
             {
                 var lesser = passes[i - 1];
