@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Day05
@@ -18,21 +19,18 @@ namespace Day05
                 throw new ArgumentOutOfRangeException(nameof(str), str, null);
             }
 
-            var row = 0;
-            foreach (var ch in match.Groups[1].Value)
-            {
-                row <<= 1;
-                if (ch == 'B') row |= 1;
-            }
-
-            var column = 0;
-            foreach (var ch in match.Groups[2].Value)
-            {
-                column <<= 1;
-                if (ch == 'R') column |= 1;
-            }
-
+            var row = match.Groups[1].Value
+                .Select(x => x == 'B')
+                .Aggregate(0, AppendBit);
+            var column = match.Groups[2].Value
+                .Select(x => x == 'R')
+                .Aggregate(0, AppendBit);
             return new BoardingPass(row, column);
+        }
+
+        private static int AppendBit(int state, bool bit)
+        {
+            return (state << 1) | (bit ? 1 : 0);
         }
     }
 }
