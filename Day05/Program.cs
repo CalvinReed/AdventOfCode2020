@@ -8,10 +8,19 @@ namespace Day05
     {
         private static void Main(string[] args)
         {
-            var maxId = File.ReadLines(args[0])
+            var passes = File.ReadLines(args[0])
                 .Select(BoardingPass.Parse)
-                .Max(x => x.Id);
-            Console.WriteLine(maxId);
+                .ToList();
+            passes.Sort((x, y) => x.Id.CompareTo(y.Id));
+            for (var i = 1; i < passes.Count; i++)
+            {
+                var lesser = passes[i - 1];
+                var greater = passes[i];
+                if (greater.Id - lesser.Id > 1)
+                {
+                    Console.WriteLine(lesser.Id + 1);
+                }
+            }
         }
     }
 }
