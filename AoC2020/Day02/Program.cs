@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 
-namespace Day02
+namespace AoC2020.Day02
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Run(string path)
         {
-            var validCount = File.ReadLines(args[0])
+            var validCount = File.ReadLines(path)
                 .Select(PasswordRecord.Parse)
                 .Count(x => x.IsValid);
             Console.WriteLine($"# of valid records: {validCount}");

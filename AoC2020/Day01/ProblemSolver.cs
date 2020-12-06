@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Day01
+namespace AoC2020.Day01
 {
     public class ProblemSolver
     {

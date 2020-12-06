@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-namespace Day02
+namespace AoC2020.Day02
 {
     public record PasswordRecord(int FirstIndex, int SecondIndex, char CheckChar, string Password)
     {

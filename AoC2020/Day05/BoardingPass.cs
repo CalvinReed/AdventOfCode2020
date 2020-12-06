@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Day05
+namespace AoC2020.Day05
 {
     public record BoardingPass(int Row, int Column)
     {

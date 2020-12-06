@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Day03
+namespace AoC2020.Day03
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Run(string path)
         {
-            var map = ReadMap(args[0]);
+            var map = ReadMap(path);
             var a = map.CountTrees(1, 1);
             var b = map.CountTrees(3, 1);
             var c = map.CountTrees(5, 1);

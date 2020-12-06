@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 
-namespace Day05
+namespace AoC2020.Day05
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Run(string path)
         {
-            var passes = File.ReadLines(args[0])
+            var passes = File.ReadLines(path)
                 .Select(BoardingPass.Parse)
                 .OrderBy(x => x.Id)
                 .ToList();

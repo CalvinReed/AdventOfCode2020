@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Day04
+namespace AoC2020.Day04
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        public static void Run(string path)
         {
-            var validCount = ReadData(args[0]).Count(IsValid);
+            var validCount = ReadData(path).Count(IsValid);
             Console.WriteLine(validCount);
         }
 
