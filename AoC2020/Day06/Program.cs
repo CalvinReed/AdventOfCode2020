@@ -34,9 +34,15 @@ namespace AoC2020.Day06
             }
         }
 
-        private static HashSet<char> ToSet(IEnumerable<string> lines)
+        private static HashSet<char> ToSet(IReadOnlyList<string> lines)
         {
-            return lines.SelectMany(x => x).ToHashSet();
+            var set = new HashSet<char>(lines[0]);
+            for (var i = 1; i < lines.Count; i++)
+            {
+                set.IntersectWith(lines[i]);
+            }
+
+            return set;
         }
     }
 }
