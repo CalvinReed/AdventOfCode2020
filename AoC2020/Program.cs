@@ -6,28 +6,31 @@ namespace AoC2020
     {
         private static void Main(string[] args)
         {
-            if (args.Length == 0 || !int.TryParse(args[0], out var day))
+            if (args.Length < 2 || !int.TryParse(args[0], out var day))
             {
-                Console.Error.WriteLine("usage: AoC day_number");
+                Console.Error.WriteLine("usage: AoC day_number input_path");
                 return;
             }
 
             switch (day)
             {
                 case 1:
-                    Day01.Program.Run(@".\Day01\input");
+                    Day01.Program.Run(args[1]);
                     break;
                 case 2:
-                    Day02.Program.Run(@".\Day02\input");
+                    Day02.Program.Run(args[1]);
                     break;
                 case 3:
-                    Day03.Program.Run(@".\Day03\input");
+                    Day03.Program.Run(args[1]);
                     break;
                 case 4:
-                    Day04.Program.Run(@".\Day04\input");
+                    Day04.Program.Run(args[1]);
                     break;
                 case 5:
-                    Day05.Program.Run(@".\Day05\input");
+                    Day05.Program.Run(args[1]);
+                    break;
+                case 6:
+                    Day06.Program.Run(args[1]);
                     break;
                 default:
                     Console.Error.WriteLine($"Invalid day number: {day}");
