@@ -32,6 +32,9 @@ namespace AoC2020
                 case 6:
                     Day06.Program.Run(args[1]);
                     break;
+                case 7:
+                    Day07.Program.Run(args[1]);
+                    break;
                 default:
                     Console.Error.WriteLine($"Invalid day number: {day}");
                     break;
