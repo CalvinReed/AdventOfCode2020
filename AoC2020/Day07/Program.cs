@@ -20,14 +20,20 @@ namespace AoC2020.Day07
 
         private static int CalculateCapacity(IReadOnlyDictionary<string, BagRule> lookup, string color)
         {
-            int Capacity(KeyValuePair<string, int> pair)
+            var cache = new Dictionary<string, int>();
+            int Calculate(string key)
             {
-                var (key, value) = pair;
-                return value + value * CalculateCapacity(lookup, key);
+                if (cache.TryGetValue(key, out var cached))
+                {
+                    return cached;
+                }
+
+                var sum = lookup[key].Contents.Sum(x => x.Value + x.Value * Calculate(x.Key));
+                cache.Add(key, sum);
+                return sum;
             }
 
-            var rule = lookup[color];
-            return rule.Contents.Sum(Capacity);
+            return Calculate(color);
         }
 
         private static HashSet<string> PossibleContainers(IReadOnlyCollection<BagRule> rules, string color)
@@ -49,20 +55,21 @@ namespace AoC2020.Day07
 
         private static Dictionary<string, HashSet<string>> InvertedLookup(IReadOnlyCollection<BagRule> rules)
         {
-            var revLookup = new Dictionary<string, HashSet<string>>(rules.Count);
+            var lookup = new Dictionary<string, HashSet<string>>(rules.Count);
             foreach (var rule in rules)
             {
-                revLookup[rule.Color] = new HashSet<string>();
+                lookup.Add(rule.Color, new HashSet<string>());
             }
+
             foreach (var rule in rules)
             {
                 foreach (var (color, _) in rule.Contents)
                 {
-                    revLookup[color].Add(rule.Color);
+                    lookup[color].Add(rule.Color);
                 }
             }
 
-            return revLookup;
+            return lookup;
         }
     }
 }
