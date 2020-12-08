@@ -14,7 +14,7 @@ namespace AoC2020.Day07
                 .ToDictionary(x => x.Color);
             var containers = PossibleContainers(rules.Values, "shiny gold");
             var capacity = CalculateCapacity(rules, "shiny gold");
-            Console.WriteLine(containers.Count);
+            Console.WriteLine(containers);
             Console.WriteLine(capacity);
         }
 
@@ -36,7 +36,7 @@ namespace AoC2020.Day07
             return Calculate(color);
         }
 
-        private static HashSet<string> PossibleContainers(IReadOnlyCollection<BagRule> rules, string color)
+        private static int PossibleContainers(IReadOnlyCollection<BagRule> rules, string color)
         {
             var lookup = InvertedLookup(rules);
             var topLevel = new HashSet<string>();
@@ -50,7 +50,7 @@ namespace AoC2020.Day07
                 }
             }
 
-            return topLevel;
+            return topLevel.Count;
         }
 
         private static Dictionary<string, HashSet<string>> InvertedLookup(IReadOnlyCollection<BagRule> rules)
