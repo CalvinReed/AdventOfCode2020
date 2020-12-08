@@ -1,80 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace AoC2020.Day08
 {
-    public class Program
+    public static class Program
     {
-        private readonly Instruction[] instructions;
-        private int index, acc;
-
-        public Program(string path)
+        public static ProgramState? RunToEnd(ProgramState start)
         {
-            var lines = File.ReadLines(path);
-            instructions = lines.Select(Instruction.Parse).ToArray();
-        }
-
-        public void TryEverything()
-        {
-            if (RunUntilLoop())
+            var stack = new Stack<ProgramState>(Run(start).Prepend(start));
+            var firstEnd = stack.Pop();
+            if (firstEnd.IsEnded)
             {
-                return;
+                return firstEnd;
             }
 
-            var controlFlow = instructions
-                .Select((instruction, i) => (instruction, i))
-                .Where(x => x.instruction.Op == "jmp" || x.instruction.Op == "nop")
-                .ToArray();
-            foreach (var (original, i) in controlFlow)
+            while (stack.TryPop(out var current))
             {
-                var modified = original.Op == "jmp"
-                    ? original with { Op = "nop" }
-                    : original with { Op = "jmp" };
-                instructions[i] = modified;
-                var success = RunUntilLoop();
-                instructions[i] = original;
-                if (!success)
+                if (Flip(current.CurrentInstruction) is not { } flipped)
                 {
                     continue;
                 }
 
-                Console.WriteLine($"Erroneous instruction at index {i}: {original}");
-                break;
+                var modified = current with {Instructions = current.Instructions.SetItem(current.Index, flipped)};
+                var end = Run(modified).Last();
+                if (end.IsEnded)
+                {
+                    return end;
+                }
             }
+
+            return null;
         }
 
-        private bool RunUntilLoop()
+        private static IEnumerable<ProgramState> Run(ProgramState start)
         {
-            index = acc = 0;
             var visited = new HashSet<int>();
-            while (index < instructions.Length && visited.Add(index))
+            var current = start;
+            while (!current.IsEnded && visited.Add(current.Index))
             {
-                ExecuteStep();
+                current = Next(current);
+                yield return current;
             }
-
-            Console.WriteLine(acc);
-            return index >= instructions.Length;
         }
 
-        private void ExecuteStep()
+        private static ProgramState Next(ProgramState state)
         {
-            switch (instructions[index])
+            return state.CurrentInstruction switch
             {
-                case { Op: "nop" }:
-                    index++;
-                    break;
-                case { Op: "jmp", Arg: var n }:
-                    index += n;
-                    break;
-                case { Op: "acc", Arg: var n }:
-                    acc += n;
-                    index++;
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
+                {Op: Instruction.NopOp} => state with {Index = state.Index + 1},
+                {Op: Instruction.JmpOp, Arg: var n} => state with {Index = state.Index + n},
+                {Op: Instruction.AccOp, Arg: var n} => state with {Acc = state.Acc + n, Index = state.Index + 1},
+                _ => throw new InvalidOperationException()
+            };
+        }
+
+        private static Instruction? Flip(Instruction instruction)
+        {
+            return instruction switch
+            {
+                {Op: Instruction.JmpOp} => instruction with {Op = Instruction.NopOp},
+                {Op: Instruction.NopOp} => instruction with {Op = Instruction.JmpOp},
+                _ => null
+            };
         }
     }
 }
