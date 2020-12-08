@@ -37,7 +37,7 @@ namespace AoC2020
                     break;
                 case 8:
                     var prog = new Day08.Program(args[1]);
-                    Console.WriteLine(prog.RunUntilLoop());
+                    prog.TryEverything();
                     break;
                 default:
                     Console.Error.WriteLine($"Invalid day number: {day}");

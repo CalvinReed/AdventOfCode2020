@@ -16,15 +16,46 @@ namespace AoC2020.Day08
             instructions = lines.Select(Instruction.Parse).ToArray();
         }
 
-        public int RunUntilLoop()
+        public void TryEverything()
         {
+            if (RunUntilLoop())
+            {
+                return;
+            }
+
+            var controlFlow = instructions
+                .Select((instruction, i) => (instruction, i))
+                .Where(x => x.instruction.Op == "jmp" || x.instruction.Op == "nop")
+                .ToArray();
+            foreach (var (original, i) in controlFlow)
+            {
+                var modified = original.Op == "jmp"
+                    ? original with { Op = "nop" }
+                    : original with { Op = "jmp" };
+                instructions[i] = modified;
+                var success = RunUntilLoop();
+                instructions[i] = original;
+                if (!success)
+                {
+                    continue;
+                }
+
+                Console.WriteLine($"Erroneous instruction at index {i}: {original}");
+                break;
+            }
+        }
+
+        private bool RunUntilLoop()
+        {
+            index = acc = 0;
             var visited = new HashSet<int>();
-            while (visited.Add(index))
+            while (index < instructions.Length && visited.Add(index))
             {
                 ExecuteStep();
             }
 
-            return acc;
+            Console.WriteLine(acc);
+            return index >= instructions.Length;
         }
 
         private void ExecuteStep()
