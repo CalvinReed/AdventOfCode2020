@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
@@ -20,9 +21,31 @@ namespace AoC2020.Day09
                     continue;
                 }
 
-                Console.WriteLine(data[i]);
+                Console.WriteLine(FindWeakness(data[i], data));
                 break;
             }
+        }
+
+        private static long FindWeakness(long irregular, IReadOnlyCollection<long> data)
+        {
+            var lo = 0;
+            var hi = 1;
+            var sum = GetRange(data, lo, hi).Sum();
+            while (sum != irregular)
+            {
+                if (sum < irregular) hi++;
+                else lo++;
+                sum = GetRange(data, lo, hi).Sum();
+            }
+
+            var min = GetRange(data, lo, hi).Min();
+            var max = GetRange(data, lo, hi).Max();
+            return min + max;
+        }
+
+        private static IEnumerable<long> GetRange(IEnumerable<long> seq, int lo, int hi)
+        {
+            return seq.Skip(lo).Take(hi - lo);
         }
     }
 }
