@@ -10,6 +10,12 @@ namespace AoC2020.Day10
         public static void Run(string path)
         {
             var adapters = ReadData(path);
+            Console.WriteLine(Part1(adapters));
+            Console.WriteLine(Part2(adapters));
+        }
+
+        private static int Part1(IReadOnlyList<int> adapters)
+        {
             var oneJoltDiffs = 0;
             var threeJoltDiffs = 0;
             for (var i = 1; i < adapters.Count; i++)
@@ -25,7 +31,39 @@ namespace AoC2020.Day10
                 }
             }
 
-            Console.WriteLine(oneJoltDiffs * threeJoltDiffs);
+            return oneJoltDiffs * threeJoltDiffs;
+        }
+
+        private static long Part2(IReadOnlyList<int> adapters)
+        {
+            var paths = new long[adapters.Count];
+            paths[0] = 1;
+            for (var i = 0; i < adapters.Count; i++)
+            {
+                var pathsUp = PathsUp(adapters, i);
+                for (var j = 1; j <= pathsUp; j++)
+                {
+                    paths[i + j] += paths[i];
+                }
+            }
+
+            return paths[^1];
+        }
+
+        private static int PathsUp(IReadOnlyList<int> adapters, int index)
+        {
+            for (var i = index + 1; i < adapters.Count; i++)
+            {
+                switch (adapters[i] - adapters[index])
+                {
+                    case 3:
+                        return i - index;
+                    case > 3:
+                        return i - index - 1;
+                }
+            }
+
+            return 0;
         }
 
         private static IReadOnlyList<int> ReadData(string path)
