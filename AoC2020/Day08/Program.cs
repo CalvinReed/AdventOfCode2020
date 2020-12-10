@@ -9,7 +9,7 @@ namespace AoC2020.Day08
         public static ProgramState? RunToEnd(ProgramState start)
         {
             var stack = new Stack<ProgramState>(Run(start).Prepend(start));
-            var firstEnd = stack.Pop();
+            var firstEnd = stack.Peek();
             if (firstEnd.IsEnded)
             {
                 return firstEnd;
