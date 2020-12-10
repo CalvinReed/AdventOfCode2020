@@ -40,30 +40,17 @@ namespace AoC2020.Day10
             paths[0] = 1;
             for (var i = 0; i < adapters.Count; i++)
             {
-                var pathsUp = PathsUp(adapters, i);
-                for (var j = 1; j <= pathsUp; j++)
+                for (var k = 1; k <= 3; k++)
                 {
-                    paths[i + j] += paths[i];
+                    var end = i + k;
+                    if (end < adapters.Count && adapters[end] - adapters[i] <= 3)
+                    {
+                        paths[end] += paths[i];
+                    }
                 }
             }
 
             return paths[^1];
-        }
-
-        private static int PathsUp(IReadOnlyList<int> adapters, int index)
-        {
-            for (var i = index + 1; i < adapters.Count; i++)
-            {
-                switch (adapters[i] - adapters[index])
-                {
-                    case 3:
-                        return i - index;
-                    case > 3:
-                        return i - index - 1;
-                }
-            }
-
-            return 0;
         }
 
         private static IReadOnlyList<int> ReadData(string path)
