@@ -50,11 +50,9 @@ namespace AoC2020.Day11
             if (tiles.GetLength(0) != other.tiles.GetLength(0) ||
                 tiles.GetLength(1) != other.tiles.GetLength(1)) return false;
             for (var x = 0; x < tiles.GetLength(0); x++)
+            for (var y = 0; y < tiles.GetLength(1); y++)
             {
-                for (var y = 0; y < tiles.GetLength(1); y++)
-                {
-                    if (tiles[x, y] != other.tiles[x, y]) return false;
-                }
+                if (tiles[x, y] != other.tiles[x, y]) return false;
             }
 
             return true;
@@ -64,35 +62,39 @@ namespace AoC2020.Day11
         {
             var next = new Tile[tiles.GetLength(0), tiles.GetLength(1)];
             for (var x = 0; x < next.GetLength(0); x++)
+            for (var y = 0; y < next.GetLength(1); y++)
             {
-                for (var y = 0; y < next.GetLength(1); y++)
+                var occupied = CountVisibleOccupied(x, y);
+                next[x, y] = tiles[x, y] switch
                 {
-                    var occupied = CountAdjacentOccupied(x, y);
-                    next[x, y] = tiles[x, y] switch
-                    {
-                        Tile.Floor => Tile.Floor,
-                        Tile.Empty when occupied == 0 => Tile.Filled,
-                        Tile.Filled when occupied >= 4 => Tile.Empty,
-                        var tile => tile
-                    };
-                }
+                    Tile.Floor => Tile.Floor,
+                    Tile.Empty when occupied == 0 => Tile.Filled,
+                    Tile.Filled when occupied >= 5 => Tile.Empty,
+                    var tile => tile
+                };
             }
 
             return new SeatingState(next);
         }
 
-        private int CountAdjacentOccupied(int x, int y)
+        private int CountVisibleOccupied(int x, int y)
         {
             var count = 0;
-            for (var xi = -1; xi <= 1 ; xi++)
+            for (var dx = -1; dx <= 1 ; dx++)
+            for (var dy = -1; dy <= 1; dy++)
             {
-                for (var yi = -1; yi <= 1; yi++)
+                if (dx == 0 && dy == 0) continue;
+                for (
+                    int xi = x + dx, yi = y + dy;
+                    xi >= 0 && yi >= 0 && xi < tiles.GetLength(0) && yi < tiles.GetLength(1);
+                    xi += dx, yi += dy)
                 {
-                    if (xi == 0 && yi == 0) continue;
-                    var xc = x + xi;
-                    var yc = y + yi;
-                    if (xc < 0 || yc < 0 || xc >= tiles.GetLength(0) || yc >= tiles.GetLength(1)) continue;
-                    if (tiles[xc, yc] == Tile.Filled) count++;
+                    if (tiles[xi, yi] == Tile.Floor) continue;
+                    if (tiles[xi, yi] == Tile.Empty) break;
+                    if (tiles[xi, yi] != Tile.Filled) throw new InvalidOperationException();
+
+                    count++;
+                    break;
                 }
             }
 
@@ -103,19 +105,14 @@ namespace AoC2020.Day11
         {
             for (var i = 1; i < lines.Count; i++)
             {
-                if (lines[0].Length != lines[i].Length)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(lines));
-                }
+                if (lines[0].Length != lines[i].Length) throw new ArgumentOutOfRangeException(nameof(lines));
             }
 
             var tiles = new Tile[lines.Max(x => x.Length), lines.Count];
             for (var y = 0; y < lines.Count; y++)
+            for (var x = 0; x < lines[y].Length; x++)
             {
-                for (var x = 0; x < lines[y].Length; x++)
-                {
-                    tiles[x, y] = Parse(lines[y][x]);
-                }
+                tiles[x, y] = Parse(lines[y][x]);
             }
 
             return tiles;
