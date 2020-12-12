@@ -19,18 +19,18 @@ namespace AoC2020.Day12
             var (action, value) = instruction;
             return action switch
             {
-                InstructionAction.North => state with {Waypoint = ShiftLatitude(state.Waypoint, value)},
-                InstructionAction.South => state with {Waypoint = ShiftLatitude(state.Waypoint, -value)},
-                InstructionAction.East => state with {Waypoint = ShiftLongitude(state.Waypoint, value)},
-                InstructionAction.West => state with {Waypoint = ShiftLongitude(state.Waypoint, -value)},
-                InstructionAction.Left => state with {Waypoint = Pivot(state.Waypoint, -value)},
-                InstructionAction.Right => state with {Waypoint = Pivot(state.Waypoint, value)},
-                InstructionAction.Forward => MoveForward(state, value),
+                InstructionAction.North => state with {Waypoint = state.Waypoint.ShiftLatitude(value)},
+                InstructionAction.South => state with {Waypoint = state.Waypoint.ShiftLatitude(-value)},
+                InstructionAction.East => state with {Waypoint = state.Waypoint.ShiftLongitude(value)},
+                InstructionAction.West => state with {Waypoint = state.Waypoint.ShiftLongitude(-value)},
+                InstructionAction.Left => state with {Waypoint = state.Waypoint.Pivot(-value)},
+                InstructionAction.Right => state with {Waypoint = state.Waypoint.Pivot(value)},
+                InstructionAction.Forward => state.MoveForward(value),
                 _ => throw new InvalidOperationException()
             };
         }
 
-        private static ShipState MoveForward(ShipState state, int value)
+        private static ShipState MoveForward(this ShipState state, int value)
         {
             return state with
             {
@@ -39,17 +39,17 @@ namespace AoC2020.Day12
             };
         }
 
-        private static Waypoint ShiftLatitude(Waypoint waypoint, int value)
+        private static Waypoint ShiftLatitude(this Waypoint waypoint, int value)
         {
             return waypoint with {LatitudeDiff = waypoint.LatitudeDiff + value};
         }
 
-        private static Waypoint ShiftLongitude(Waypoint waypoint, int value)
+        private static Waypoint ShiftLongitude(this Waypoint waypoint, int value)
         {
             return waypoint with {LongitudeDiff = waypoint.LongitudeDiff + value};
         }
 
-        private static Waypoint Pivot(Waypoint waypoint, int value)
+        private static Waypoint Pivot(this Waypoint waypoint, int value)
         {
             return value switch
             {
