@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace AoC2020.Day12
 {
+    public record ShipState(int Latitude, int Longitude, Waypoint Waypoint);
+
+    public record Waypoint(int LatitudeDiff, int LongitudeDiff);
+
     public static class Program
     {
         public static void Run(string path)
@@ -16,26 +20,16 @@ namespace AoC2020.Day12
 
         private static ShipState Apply(ShipState state, Instruction instruction)
         {
-            var (action, value) = instruction;
-            return action switch
+            return instruction.Action switch
             {
-                InstructionAction.North => state with {Waypoint = state.Waypoint.ShiftLatitude(value)},
-                InstructionAction.South => state with {Waypoint = state.Waypoint.ShiftLatitude(-value)},
-                InstructionAction.East => state with {Waypoint = state.Waypoint.ShiftLongitude(value)},
-                InstructionAction.West => state with {Waypoint = state.Waypoint.ShiftLongitude(-value)},
-                InstructionAction.Left => state with {Waypoint = state.Waypoint.Pivot(-value)},
-                InstructionAction.Right => state with {Waypoint = state.Waypoint.Pivot(value)},
-                InstructionAction.Forward => state.MoveForward(value),
+                InstructionAction.North => state with {Waypoint = state.Waypoint.ShiftLatitude(instruction.Value)},
+                InstructionAction.South => state with {Waypoint = state.Waypoint.ShiftLatitude(-instruction.Value)},
+                InstructionAction.East => state with {Waypoint = state.Waypoint.ShiftLongitude(instruction.Value)},
+                InstructionAction.West => state with {Waypoint = state.Waypoint.ShiftLongitude(-instruction.Value)},
+                InstructionAction.Left => state with {Waypoint = state.Waypoint.Pivot(-instruction.Value)},
+                InstructionAction.Right => state with {Waypoint = state.Waypoint.Pivot(instruction.Value)},
+                InstructionAction.Forward => state.MoveForward(instruction.Value),
                 _ => throw new InvalidOperationException()
-            };
-        }
-
-        private static ShipState MoveForward(this ShipState state, int value)
-        {
-            return state with
-            {
-                Latitude = state.Latitude + value * state.Waypoint.LatitudeDiff,
-                Longitude = state.Longitude + value * state.Waypoint.LongitudeDiff
             };
         }
 
@@ -58,6 +52,15 @@ namespace AoC2020.Day12
                 270 or -90 => waypoint with {LatitudeDiff = waypoint.LongitudeDiff, LongitudeDiff = -waypoint.LatitudeDiff},
                 180 or -180 => waypoint with {LatitudeDiff = -waypoint.LatitudeDiff, LongitudeDiff = -waypoint.LongitudeDiff},
                 _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+            };
+        }
+
+        private static ShipState MoveForward(this ShipState state, int value)
+        {
+            return state with
+            {
+                Latitude = state.Latitude + value * state.Waypoint.LatitudeDiff,
+                Longitude = state.Longitude + value * state.Waypoint.LongitudeDiff
             };
         }
     }
