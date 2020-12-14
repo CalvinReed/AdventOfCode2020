@@ -9,26 +9,28 @@ namespace AoC2020.Day14
     {
         public static void Run(string path)
         {
-            var mem = new Dictionary<int, ulong>();
+            var mem = new Dictionary<ulong, long>();
             var mask = new Mask(0, ulong.MaxValue);
             foreach (var line in File.ReadLines(path))
             {
-                if (Mask.TryParse(line) is {} parsedMask)
+                if (Mask.TryParse(line) is { } parsedMask)
                 {
                     mask = parsedMask;
                     continue;
                 }
 
-                if (WriteInstruction.TryParse(line) is not {} instruction)
+                if (WriteInstruction.TryParse(line) is not { } instruction)
                 {
                     throw new InvalidOperationException();
                 }
 
-                var maskedValue = mask.Apply(instruction.Value);
-                mem[instruction.Index] = maskedValue;
+                foreach (var index in mask.Apply(instruction.Index))
+                {
+                    mem[index] = instruction.Value;
+                }
             }
 
-            Console.WriteLine(mem.Values.Sum(Convert.ToInt64));
+            Console.WriteLine(mem.Values.Sum());
         }
     }
 }

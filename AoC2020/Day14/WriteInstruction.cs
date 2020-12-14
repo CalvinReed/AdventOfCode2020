@@ -2,7 +2,7 @@
 
 namespace AoC2020.Day14
 {
-    public record WriteInstruction(int Index, ulong Value)
+    public record WriteInstruction(ulong Index, long Value)
     {
         public static WriteInstruction? TryParse(string input)
         {
@@ -12,8 +12,8 @@ namespace AoC2020.Day14
                 return null;
             }
 
-            var index = int.Parse(match.Groups[1].Value);
-            var value = ulong.Parse(match.Groups[2].Value);
+            var index = ulong.Parse(match.Groups[1].Value);
+            var value = long.Parse(match.Groups[2].Value);
             return new WriteInstruction(index, value);
         }
     }
