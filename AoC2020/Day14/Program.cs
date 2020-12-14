@@ -10,25 +10,15 @@ namespace AoC2020.Day14
         public static void Run(string path)
         {
             var mem = new Dictionary<ulong, long>();
-            var mask = new Mask(0, ulong.MaxValue);
+            var mask = new Mask(0, 0);
             foreach (var line in File.ReadLines(path))
-            {
                 if (Mask.TryParse(line) is { } parsedMask)
-                {
                     mask = parsedMask;
-                    continue;
-                }
-
-                if (WriteInstruction.TryParse(line) is not { } instruction)
-                {
+                else if (WriteInstruction.TryParse(line) is { } instruction)
+                    foreach (var index in mask.Apply(instruction.Index))
+                        mem[index] = instruction.Value;
+                else
                     throw new InvalidOperationException();
-                }
-
-                foreach (var index in mask.Apply(instruction.Index))
-                {
-                    mem[index] = instruction.Value;
-                }
-            }
 
             Console.WriteLine(mem.Values.Sum());
         }
