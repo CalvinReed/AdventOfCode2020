@@ -7,11 +7,11 @@ namespace AoC2020.Day08
 {
     public record ProgramState(ImmutableArray<Instruction> Instructions, int Index, int Acc)
     {
-        // Rider 2020.3 EAP10 erroneously suggests that this property be made static
+        // Rider 2020.3 erroneously suggests that this property be made static
         [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
         public Instruction CurrentInstruction => Instructions[Index];
 
-        // Rider 2020.3 EAP10 erroneously suggests that this property be made static
+        // Rider 2020.3 erroneously suggests that this property be made static
         [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
         public bool IsEnded => Index >= Instructions.Length;
 
