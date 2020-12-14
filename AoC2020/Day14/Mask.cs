@@ -11,8 +11,8 @@ namespace AoC2020.Day14
         {
             var indices = GetIndices(Floating);
             var ones = value | Ones;
-            var count = 1U << indices.Length;
-            for (var i = 0U; i < count; i++)
+            var possibilities = 1UL << indices.Length;
+            for (var i = 0UL; i < possibilities; i++)
             {
                 var mask = Spread(i, indices);
                 yield return ones ^ mask;
@@ -37,12 +37,12 @@ namespace AoC2020.Day14
             return new Mask(ones, floating);
         }
 
-        private static ulong Spread(uint n, IReadOnlyList<int> indices)
+        private static ulong Spread(ulong permutation, IReadOnlyList<int> indices)
         {
             var mask = 0UL;
             for (var i = 0; i < indices.Count; i++)
             {
-                ulong bit = (n >> i) & 0b1;
+                var bit = (permutation >> i) & 0b1;
                 mask |= bit << indices[i];
             }
 
