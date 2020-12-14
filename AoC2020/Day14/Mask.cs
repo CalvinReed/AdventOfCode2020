@@ -7,14 +7,15 @@ namespace AoC2020.Day14
 {
     public record Mask(ulong Ones, ulong Floating)
     {
+        private readonly IReadOnlyList<int> floatingIndices = GetIndices(Floating);
+
         public IEnumerable<ulong> Apply(ulong value)
         {
-            var indices = GetIndices(Floating);
             var ones = value | Ones;
-            var possibilities = 1UL << indices.Length;
+            var possibilities = 1UL << floatingIndices.Count;
             for (var i = 0UL; i < possibilities; i++)
             {
-                var mask = Spread(i, indices);
+                var mask = Spread(i, floatingIndices);
                 yield return ones ^ mask;
             }
         }
