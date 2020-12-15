@@ -9,7 +9,7 @@ namespace AoC2020.Day15
         public static void Run(string input)
         {
             var parsed = input.Split(',').Select(int.Parse);
-            var result = GenerateSequence(parsed, 2020).Last();
+            var result = GenerateSequence(parsed, 30_000_000).Last();
             Console.WriteLine(result);
         }
 
