@@ -8,7 +8,7 @@ namespace AoC2020
         {
             if (args.Length < 2 || !int.TryParse(args[0], out var day))
             {
-                Console.Error.WriteLine("usage: AoC day_number input_path");
+                Console.Error.WriteLine("usage: AoC day input");
                 return;
             }
 
@@ -57,6 +57,9 @@ namespace AoC2020
                     break;
                 case 14:
                     Day14.Program.Run(args[1]);
+                    break;
+                case 15:
+                    Day15.Program.Run(args[1]);
                     break;
                 default:
                     Console.Error.WriteLine($"Invalid day number: {day}");
