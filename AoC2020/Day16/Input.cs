@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -6,24 +7,23 @@ namespace AoC2020.Day16
 {
     public class Input
     {
-        private Input(IReadOnlyDictionary<string, Constraint> constraints, IReadOnlyList<IReadOnlyList<int>> tickets)
+        private Input(IReadOnlyList<Constraint> constraints, IReadOnlyList<IReadOnlyList<int>> tickets)
         {
             Constraints = constraints;
             Tickets = tickets;
         }
 
-        public IReadOnlyDictionary<string, Constraint> Constraints { get; }
+        public IReadOnlyList<Constraint> Constraints { get; }
 
         public IReadOnlyList<IReadOnlyList<int>> Tickets { get; }
 
         public static Input Read(string path)
         {
             using var enumerator = File.ReadLines(path).GetEnumerator();
-            var constraints = new Dictionary<string, Constraint>();
+            var constraints = new List<Constraint>();
             while (enumerator.MoveNext() && enumerator.Current != string.Empty)
             {
-                var constraint = Constraint.Parse(enumerator.Current);
-                constraints.Add(constraint.Name, constraint);
+                constraints.Add(Constraint.Parse(enumerator.Current));
             }
 
             var tickets = new List<int[]>();
